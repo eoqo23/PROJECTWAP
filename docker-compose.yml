@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  php:
+    build: .
+    container_name: php-projectwap
+    volumes:
+      - /home/naufal/PROJECTWAP:/var/www/html
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx-projectwap
+    ports:
+      - "8081:80"
+    volumes:
+      - /home/naufal/PROJECTWAP:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    networks:
+      - app-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-projectwap
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: projectwapdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user123
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql   # data permanen
+    networks:
+      - app-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-projectwap
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: user
+      PMA_PASSWORD: user123
+    ports:
+      - "8082:80"   # akses di http://localhost:8082
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
