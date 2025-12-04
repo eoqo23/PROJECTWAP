@@ -55,7 +55,7 @@ if (isset($_POST['login'])) {
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Login - FitTask</title>
+    <title>Login - WOI</title>
     <style>
         * {
             margin: 0; padding: 0; box-sizing: border-box;
