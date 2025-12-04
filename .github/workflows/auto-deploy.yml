@@ -1,0 +1,26 @@
+name: Auto Deploy
+
+on:
+  push:
+    branches:
+      - main  # Bisa diganti branch lain misal gantinamajudul
+
+jobs:
+  deploy:
+    runs-on: my-laptop  # Sesuaikan dengan runner kamu
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Pull latest code
+      run: |
+        git fetch --all
+        git reset --hard origin/main
+
+    - name: Docker Deploy
+      run: |
+        docker compose down
+        docker compose pull
+        docker compose build --no-cache
+        docker compose up -d
